@@ -1,5 +1,6 @@
-/scripts
-/csv
-.env
-*/node_modules
-.DS_Store
+**/scripts
+**/csv
+**/.env
+**/node_modules
+**/config
+**/.DS_Store
