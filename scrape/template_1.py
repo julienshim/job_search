@@ -40,3 +40,26 @@ def parse_job_item(job_item):
     }
     
     return job_item_dict
+
+
+def fetch_all_jobs():
+    running = True
+    current_page_number = 1
+    tmp = []
+
+    while running:
+        soup = get_soup(current_page_number)
+        job_items = soup.find_all('div', class_='job-item')
+        job_items_parsed = list(map(parse_job_item, job_items))
+        job_items_parsed_len = len(job_items_parsed)
+
+        if job_items_parsed_len == 0:
+            running = False
+        else:
+            print(f'Fetching Page {current_page_number} jobs... {job_items_parsed_len} job(s) found')
+            tmp += job_items_parsed
+            current_page_number += 1
+            rand_int = randint(3, 7)
+            sleep(rand_int)
+
+    return tmp
