@@ -79,3 +79,9 @@ def get_job_ref_date(row):
         'notes': notes,
     }
     return tmp
+
+def load_previously_imported_jobs():
+    with open('') as ref:
+        data = [row for row in reader(ref)][1:]
+        data = list(map(get_job_ref_date, data))
+        return data
