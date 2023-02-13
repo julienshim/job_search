@@ -101,3 +101,12 @@ def job_is_previously_imported(job_reference_no):
                 return job_item
     tmp = {'job_reference_no': '', 'import_date': ''}
     return tmp
+
+def status_check(row):
+    seen = False
+    for job_item in all_job_items_fetched:
+        if row['job_reference_no'] == job_item['job_reference_no']:
+            seen = True
+    if not seen:
+        row['status'] = 'DELISTED'
+    return row
