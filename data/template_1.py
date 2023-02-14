@@ -110,3 +110,49 @@ def status_check(row):
     if not seen:
         row['status'] = 'DELISTED'
     return row
+
+
+with open(previously_imported_jobs_path, csv_write_mode, encoding='utf-8') as f:
+    csv_writer = writer(f)
+    if csv_write_mode == 'w':
+        csv_writer.writerow(['import_date', 'job_reference_no', 'job_title', 'city', 'state', 'remote_possible', 'employment_type', 'job_posting_url', 'status', 'notes'])
+
+    jobs_written_count = 0
+    jobs_skipped_count = 0
+    for job_item in all_job_items_fetched:
+        job_title = job_item['job_title']
+        job_posting_url = job_item['job_link']
+        job_reference_no = job_item['job_reference_no']
+        city = job_item['city']
+        state = job_item['state']
+        remote_possible = job_item['remote_possible']
+        employment_type = job_item['employment_type']
+        import_date = datetime.today().strftime('%Y-%m-%d')
+
+        import_status = job_is_previously_imported(job_reference_no)
+        import_job_reference_no = import_status["job_reference_no"]
+        import_import_date = import_status["import_date"]
+
+        if import_job_reference_no and import_import_date:
+            jobs_skipped_count += 1
+        elif state.lower() in ['california']:
+            job_item_row = [import_date, job_reference_no, job_title, city, state, remote_possible, employment_type, job_posting_url, '','']
+            csv_writer.writerow(job_item_row)
+            jobs_written_count += 1
+
+    for job_item in previously_imported_jobs:
+        job_item_updated = status_check(job_item)
+        job_title = job_item_updated['job_title']
+        job_posting_url = job_item_updated['job_positing_url']
+        job_reference_no = job_item_updated['job_reference_no']
+        city = job_item_updated['city']
+        state = job_item_updated['state']
+        remote_possible = job_item_updated['remote_possible']
+        employment_type = job_item_updated['employment_type']
+        import_date = job_item_updated['import_date']
+        status = job_item_updated['status']
+        notes = job_item_updated['notes']
+        if state.lower() in ['california']:
+            csv_writer.writerow([import_date, job_reference_no, job_title, city, state, remote_possible, employment_type, job_posting_url, status, notes])
+
+    print(f'Done! {jobs_written_count} new jobs added.')
