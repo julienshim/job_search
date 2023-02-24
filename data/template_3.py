@@ -58,3 +58,18 @@ def fetch_all_jobs():
             sleep(rand_num)
 
     return tmp
+
+def get_job_ref_date(row):
+    [import_date, job_reference_no, job_title, location, remote_possible, job_posting_url, is_tagged_new, status, notes] = row
+    tmp = {
+        'job_reference_no': job_reference_no,
+        'import_date': import_date
+    }
+    return tmp
+
+
+def load_previously_imported_jobs():
+    with open('') as ref:
+        data = [row for row in reader(ref)][1:]
+        data = list(map(get_job_ref_date, data))
+        return data
