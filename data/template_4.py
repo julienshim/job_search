@@ -45,3 +45,13 @@ def fetch_items():
             random_int = randint(3,7)
             sleep(random_int)
     return tmp
+
+def get_target_keys(all_job_items_fetched):
+    tmp = []
+    for company in all_job_items_fetched:
+        for job_item in all_job_items_fetched[company]:
+            keys = job_item.keys()
+            for key in keys:
+                if key not in tmp:
+                    tmp.append(key)
+    return tmp
