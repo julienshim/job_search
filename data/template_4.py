@@ -55,3 +55,13 @@ def get_target_keys(all_job_items_fetched):
                 if key not in tmp:
                     tmp.append(key)
     return tmp
+
+
+def get_job_ref_data(row):
+    [import_date, company_name, id, jobOpeningName, departmentId, departmentLabel, employmentStatusLabel, location, isRemote, status, notes] = row
+    tmp = {
+        'job_reference_no': id,
+        'job_company_name': company_name,
+        'import_date': import_date
+    }
+    return tmp
