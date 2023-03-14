@@ -65,3 +65,19 @@ def get_job_ref_data(row):
         'import_date': import_date
     }
     return tmp
+
+
+def load_previously_imported_jobs():
+    with open('') as ref:
+        data = [row for row in reader(ref)][1:]
+        data = list(map(get_job_ref_data, data))
+        return data
+
+all_job_items_fetched = fetch_items()
+previously_imported_jobs_path = ''
+previously_imported_jobs_path_exists = path.exists(previously_imported_jobs_path)
+previously_imported_jobs = load_previously_imported_jobs() if previously_imported_jobs_path_exists else []
+previously_imported_jobs_len = len(previously_imported_jobs)
+all_target_keys = get_target_keys(all_job_items_fetched)
+all_target_keys = ['id', 'jobOpeningName', 'employmentStatusLabel', 'location', 'isRemote']
+csv_write_mode = 'a' if previously_imported_jobs_path_exists else 'w'
