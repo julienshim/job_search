@@ -81,3 +81,12 @@ previously_imported_jobs_len = len(previously_imported_jobs)
 all_target_keys = get_target_keys(all_job_items_fetched)
 all_target_keys = ['id', 'jobOpeningName', 'employmentStatusLabel', 'location', 'isRemote']
 csv_write_mode = 'a' if previously_imported_jobs_path_exists else 'w'
+
+
+def job_is_previously_imported(job_reference_no, job_company_name):
+    if previously_imported_jobs_len > 0:
+        for job_item in previously_imported_jobs:
+            if job_item['job_reference_no'] == job_reference_no and job_item['job_company_name'] == job_company_name:
+                return job_item
+    tmp = {'job_reference_no': '', 'import_date': ''}
+    return tmp
