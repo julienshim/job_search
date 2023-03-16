@@ -90,3 +90,55 @@ def job_is_previously_imported(job_reference_no, job_company_name):
                 return job_item
     tmp = {'job_reference_no': '', 'import_date': ''}
     return tmp
+
+
+with open(previously_imported_jobs_path, csv_write_mode, encoding='utf-8') as output_csv:
+    csv_writer = writer(output_csv)
+
+    if csv_write_mode == 'w':
+        csv_writer.writerow(['import_date', 'company_name'] + all_target_keys + ['status', 'notes'])
+
+    jobs_written_count = 0
+    jobs_skipped_count = 0
+
+    for company_name in all_job_items_fetched:
+        for job in all_job_items_fetched[company_name]:
+            job_reference_no = job['id']
+            job_company_name = company_name
+            import_date = datetime.today().strftime('%Y-%m-%d')
+            job_item_row = [import_date, company_name]
+
+            skip = False
+
+            for key in all_target_keys:
+                if key in job:
+                    key_value = job[key]
+                    if key in ['location']:
+                        city = job[key]['city']
+                        state = job[key]['state']
+                        if state not in ['California']:
+                            skip = True
+                        key_value = f'{city}, {state}'
+                    job_item_row.append(key_value)
+                else:
+                    job_item_row.append('')
+
+            job_item_row += ['', '']
+
+            import_status = job_is_previously_imported(job_reference_no, job_company_name)
+            import_job_reference_no = import_status["job_reference_no"]
+            import_import_date = import_status["import_date"]
+
+
+            if import_job_reference_no and import_import_date:
+                jobs_skipped_count += 1
+            else: 
+                if not skip:
+                    csv_writer.writerow(job_item_row)
+                    jobs_written_count += 1
+
+        print(f'{jobs_written_count} new {job_company_name} jobs added.')
+
+print('Done!')
+
+            
