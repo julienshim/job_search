@@ -4,3 +4,7 @@
 **/node_modules
 **/config
 **/.DS_Store
+**/TODOS
+**/venv
+**/results
+**/__pycache__
