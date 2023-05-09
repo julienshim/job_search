@@ -24,3 +24,13 @@ def fetch_seed_body():
         data_header = data[0]
         data_body = data[1:]
         return data_body
+    
+def get_target_keys(all_job_items_fetched):
+    tmp = []
+    for company in all_job_items_fetched:
+        for job_item in all_job_items_fetched[company]:
+            keys = job_item.keys()
+            for key in keys:
+                if key not in tmp:
+                    tmp.append(key)
+    return tmp
