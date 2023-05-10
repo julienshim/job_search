@@ -34,3 +34,12 @@ def get_target_keys(all_job_items_fetched):
                 if key not in tmp:
                     tmp.append(key)
     return tmp
+
+def get_job_ref_data(row):
+    [import_date, company_name, permalink, status, formType, atsSourcePlatform, atsSourceId, title, content, location, office, team, department, offices, departments, workType, publicUrl, postedAt, jobBoard, shareTemplates, publicUnfurlImageUrl, publicShareableUrl, status, notes] = row
+    tmp = {
+        'job_reference_no': atsSourceId,
+        'job_company_name': company_name,
+        'import_date': import_date
+    }
+    return tmp
