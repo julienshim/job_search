@@ -43,3 +43,14 @@ def get_job_ref_data(row):
         'import_date': import_date
     }
     return tmp
+
+def load_previously_imported_jobs():
+    with open('./results/template5.csv') as ref:
+        data = [row for row in reader(ref)][1:]
+        data = list(map(get_job_ref_data, data))
+        return data
+
+previously_imported_jobs_path = './results/careerpuck.csv'
+previously_imported_jobs_path_exists = path.exists(previously_imported_jobs_path)
+previously_imported_jobs = load_previously_imported_jobs() if previously_imported_jobs_path_exists else []
+previously_imported_jobs_len = len(previously_imported_jobs)
