@@ -64,3 +64,17 @@ def job_is_previously_imported(job_reference_no, job_company_name):
                 return job_item
     tmp = {'job_reference_no': '', 'import_date': ''}
     return tmp
+
+def sanitize_content(output_value):
+    for item in [
+        ('&lt;', '<'),
+        ('&gt;', '>'),
+        ('(<([^>]+)>)', '\n'),
+        ('&NewLine;', '\n'),
+        ('\n{1,}', '\n'),
+        ('&comma;', ','),
+        ('&CloseCurlyQuote;', '’')
+        # ('&amp;', '&')
+    ]:
+        output_value = sub(item[0], item[1], output_value)
+    return output_value
