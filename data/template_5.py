@@ -50,7 +50,7 @@ def load_previously_imported_jobs():
         data = list(map(get_job_ref_data, data))
         return data
 
-previously_imported_jobs_path = './results/careerpuck.csv'
+previously_imported_jobs_path = './results/template5.csv'
 previously_imported_jobs_path_exists = path.exists(previously_imported_jobs_path)
 previously_imported_jobs = load_previously_imported_jobs() if previously_imported_jobs_path_exists else []
 previously_imported_jobs_len = len(previously_imported_jobs)
@@ -78,3 +78,44 @@ def sanitize_content(output_value):
     ]:
         output_value = sub(item[0], item[1], output_value)
     return output_value
+
+with open(previously_imported_jobs_path, csv_write_mode, encoding='utf-8') as tempalte5_csv:
+    csv_writer = writer(tempalte5_csv)
+
+    if csv_write_mode == 'w':
+        csv_writer.writerow(['import_date', 'company_name'] + all_target_keys + ['status', 'notes'])
+
+    jobs_written_count = 0
+    jobs_skipped_count = 0
+
+    for company_name in all_job_items_fetched:
+        for job in all_job_items_fetched[company_name]:
+            job_reference_no = job['atsSourceId']
+            job_company_name = company_name
+            import_date = datetime.today().strftime('%Y-%m-%d')
+            job_item_row = [import_date, company_name]
+
+            for target_key in all_target_keys:
+                output_value = ''
+                if target_key in job:
+                    key_value = job[target_key]
+                    if target_key in ['content']:
+                        key_value = sanitize_content(key_value)
+                    output_value = key_value
+                job_item_row.append(str(output_value))
+            
+            job_item_row += ['', '']
+
+            import_status = job_is_previously_imported(job_reference_no, job_company_name)
+            import_job_reference_no = import_status["job_reference_no"]
+            import_import_date = import_status["import_date"]
+
+            if import_job_reference_no and import_import_date:
+                jobs_skipped_count += 1
+            else: 
+                csv_writer.writerow(job_item_row)
+                jobs_written_count += 1
+        
+        print(f'{jobs_written_count} new {job_company_name} jobs added.')
+
+print('Done!')
