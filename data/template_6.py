@@ -17,3 +17,10 @@ def fetch_jobs(url):
         jobs_found = response_json['']
         return jobs_found
     return []
+
+def fetch_seed_body():
+    with open('') as csv_input:
+        data = [row for row in reader(csv_input)]
+        data_header = data[0]
+        data_body = data[1:]
+        return data_body
