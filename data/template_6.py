@@ -37,26 +37,36 @@ def fetch_all_jobs():
         }
     }
 
-seed_body = fetch_seed_body()
-tmp = {}
-for row in seed_body:
-    [company_id, url, company_name, careers_page, api] = list(map(lambda x: x.strip(), row))
-    if company_id in ['']:
-        api_url = ''
+    seed_body = fetch_seed_body()
+    tmp = {}
+    for row in seed_body:
+        [company_id, url, company_name, careers_page, api] = list(map(lambda x: x.strip(), row))
         if company_id in ['']:
-            api_url = careers_page
-        elif api in ['']:
-            board_token = careers_page.replace(reference[api]['')
-            api_url = reference[api]['', board_token)
-        response_jobs = fetch_jobs(api_url)
-        response_jobs_len = len(response_jobs)
+            api_url = ''
+            if company_id in ['']:
+                api_url = careers_page
+            elif api in ['']:
+                board_token = careers_page.replace(reference[api])
+                api_url = reference[api]
+            response_jobs = fetch_jobs(api_url)
+            response_jobs_len = len(response_jobs)
 
-        if response_jobs_len > 0:
-            print(f'')
-            if company_name in tmp:
-                tmp[company_name] += response_jobs
-            else:
-                tmp[company_name] = response_jobs
-        random_int = randint(3,7)
-        sleep(random_int)
-return tmp
+            if response_jobs_len > 0:
+                print(f'')
+                if company_name in tmp:
+                    tmp[company_name] += response_jobs
+                else:
+                    tmp[company_name] = response_jobs
+            random_int = randint(3,7)
+            sleep(random_int)
+    return tmp
+
+def get_target_keys(all_job_items_fetched):
+    tmp = []
+    for company in all_job_items_fetched:
+        for job_item in all_job_items_fetched[company]:
+            keys = job_item.keys()
+            for key in keys:
+                if key not in tmp:
+                    tmp.append(key)
+    return tmp
