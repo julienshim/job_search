@@ -91,3 +91,13 @@ previously_imported_jobs_path = ''
 previously_imported_jobs_path_exists = path.exists(previously_imported_jobs_path)
 previously_imported_jobs = load_previously_imported_jobs() if previously_imported_jobs_path_exists else []
 previously_imported_jobs_len = len(previously_imported_jobs)
+all_target_keys = get_target_keys(all_job_items_fetched)
+csv_write_mode = ''
+
+def job_is_previously_imported(job_reference_no, job_company_name):
+    if previously_imported_jobs_len > 0:
+        for job_item in previously_imported_jobs:
+            if job_item[''] == job_company_name:
+                return job_item
+    tmp = {''}
+    return tmp
