@@ -117,3 +117,53 @@ def sanitize_content(output_value):
     ]:
         output_value = sub(item[0], item[1], output_value)
     return output_value
+
+with open(previously_imported_jobs_path, csv_write_mode, encoding='') as template6_csv:
+    csv_writer = writer(template6_csv)
+
+    if csv_write_mode == '':
+        csv_writer.writerow([''])
+        # print(len(['']))
+
+    jobs_written_count = 0
+    jobs_skipped_count = 0
+
+    for company_name in all_job_items_fetched:
+        for job in all_job_items_fetched[company_name]:
+            job_reference_no = job['']
+            job_company_name = company_name
+            import_date = datetime.today().strftime('')
+            job_item_row = [import_date, company_name]
+
+            for target_key in all_target_keys:
+                output_value = ''
+                if target_key in job:
+                    key_value = job[target_key]
+                    if isinstance(key_value, list):
+                        if len(key_value) > 0:
+                            if '' in key_value[0]:
+                                output_value = key_value[0]['']
+                    elif isinstance(key_value, dict):
+                        if ''in key_value:
+                            output_value = key_value['']
+                    else:
+                        output_value = key_value
+                    if target_key in ['']:
+                        output_value = sanitize_content(output_value)
+                job_item_row.append(str(output_value))
+ 
+            job_item_row += ['']
+            
+            import_status = job_is_previously_imported(job_reference_no, job_company_name)
+            import_job_reference_no = import_status["job_reference_no"]
+            import_import_date = import_status["import_date"]
+
+            if import_job_reference_no and import_import_date:
+                jobs_skipped_count += 1
+            else: 
+                csv_writer.writerow(job_item_row)
+                jobs_written_count += 1
+        
+        print(f'')
+
+print('')
