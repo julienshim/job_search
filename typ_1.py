@@ -32,3 +32,13 @@ def get_seconds(job_link):
 
 def parse_inline_text(inline_text):
     return inline_text.string
+
+def parse_job_item(job_item):
+    job_link = f"https://www.unamed.com{job_item.find('a', class_='job-link')['href']}"
+    locations = job_item.find_all('div', class_='location')
+    location = ', '.join(list(map(lambda x: x.getText().strip(), locations)))
+    tmp = {
+        'job_link': job_link,
+        'location': location
+    }
+    return tmp
