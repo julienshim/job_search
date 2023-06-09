@@ -1,11 +1,7 @@
-**/scripts
 **/csv
-**/.env
-**/node_modules
-**/config
-**/.DS_Store
-**/TODOS
-**/venv
-**/results
+**/html
+**/json
 **/__pycache__
-**/New Folder With Items
+**/venv
+**/.DS_Store
+**/results
