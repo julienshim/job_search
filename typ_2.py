@@ -18,3 +18,14 @@ def get_soup(page_number):
     response = request('GET', url, headers=headers, data=payload)
     soup = BeautifulSoup(response.text, 'html.parser')
     return soup
+
+def get_seconds(job_link):
+    
+    payload={}
+    headers={}
+
+    response = request('GET', job_link, headers=headers, data=payload)
+    response_txt = response.text
+    job_id = job_link.split('/')[-1]
+    with open(f'./html/unamed/{job_id}.html', 'w') as output_file:
+        output_file.write(response_txt)
