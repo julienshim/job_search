@@ -29,3 +29,6 @@ def get_seconds(job_link):
     job_id = job_link.split('/')[-1]
     with open(f'./html/unamed/{job_id}.html', 'w') as output_file:
         output_file.write(response_txt)
+
+def parse_inline_text(inline_text):
+    return inline_text.string
