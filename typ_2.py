@@ -32,3 +32,10 @@ def get_seconds(job_link):
 
 def parse_inline_text(inline_text):
     return inline_text.string
+
+def parse_job_item(job_item):
+    job_link = f"https://unamed.com{job_item['href']}".strip()
+    tmp = {
+        'job_link': job_link
+    }
+    return tmp
