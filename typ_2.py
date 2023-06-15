@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from requests import request
 from bs4 import BeautifulSoup
+from random import randint
+from time import sleep
 
 def get_date_n_weeks_ago():
     today = datetime.now()
@@ -39,3 +41,25 @@ def parse_job_item(job_item):
         'job_link': job_link
     }
     return tmp
+
+def fetch_all_jobs():
+    running = True
+    current_page_number = 2
+
+    while running:
+        soup = get_soup(current_page_number)
+        job_items = soup.find_all('a', class_='job-item')
+        job_items_parsed = list(map(parse_job_item, job_items))
+        job_items_parsed_len = len(job_items_parsed)
+
+        if job_items_parsed_len == 0:
+            running = False
+        else:
+            for job_item in job_items_parsed:
+                print(job_item['job_link'])
+                get_seconds(job_item['job_link'])
+                sleep(randint(3, 7))
+            current_page_number += 1
+            sleep(randint(3,7))
+
+fetch_all_jobs()
