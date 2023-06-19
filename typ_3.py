@@ -29,3 +29,15 @@ def fetch_seed_body():
         data_header = data[0]
         data_body = data[1:]
         return data_body
+    
+def fetch_all_jobs():
+    seed_body = fetch_seed_body()
+    tmp = {}
+
+    for row in seed_body:
+        [company_id, url, company_name, careers_page, api] = list(map(lambda x: x.strip(), row))
+        if api in ['unamed']:
+            api_url = careers_page
+            response_jobs = fetch_jobs(api_url, company_id)
+
+fetch_all_jobs()
