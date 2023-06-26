@@ -29,3 +29,31 @@ def fetch_seed_body():
         data_header = data[0]
         data_body = data[1:]
         return data_body
+    
+def fetch_all_jobs():
+    reference = {
+        'unamed': {
+            'api': 'https://boards-api.unamed.io/boards/$$BT$$/jobs',
+            'root_url': 'https://boards.unamed.io/'
+        },
+        'unamed (SPECIAL)': {
+            'api': 'https://boards-api.unamed.io/boards/$$BT$$/jobs',
+            'root_url': 'https://boards.unamed.io/'
+        }
+    }
+
+    seed_body = fetch_seed_body()
+    tmp = {}
+
+    for row in seed_body:
+        [company_id, url, company_name, careers_page, api] = list(map(lambda x: x.strip(), row))
+        if company_id in ['company'] or api in ['unamed', 'unamed (SPECIAL)']:
+            api_url = ''
+            if company_id in ['company']:
+                api_url = careers_page
+            elif api in ['unamed', 'unamed (SPECIAL)']:
+                board_token = careers_page.replace(reference[api]['root_url'], '')
+                api_url = reference[api]['api'].replace('$$BT$$', board_token)
+            response_jobs = fetch_jobs(api_url, company_id)
+
+fetch_all_jobs()
